@@ -1,0 +1,45 @@
+import pandas as pd
+import json
+from pandas.io.json import json_normalize
+from pandas.io.json import read_json
+
+pd.set_option('display.max_rows', 200)
+%matplotlib inline
+
+# twit29Tusk = '/home/jay/Downloads/sdsv/CASA0006dsss/BrexitMoon/tw/20190329Tusk.json'
+twit29Tusk = '/home/jay/Downloads/sdsv/CASA0006dsss/BrexitMoon/tw-test/20190329TuskTruncated.json'
+json29Tusk = []
+
+with open(twit29Tusk) as tweetInput:
+    for line in tweetInput:
+        json29Tusk.append(json.loads(line))
+    
+dict29Tusk = json29Tusk[0]
+print('twit29Tusk is type', type (twit29Tusk)) 
+print('json29Tusk is type', type (json29Tusk))    # it is a list
+print('dict29Tusk is type', type (dict29Tusk))    # it is a dictionary
+
+# https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_json.html#pandas.read_json
+# this works for 'created_at', 'extended_tweet', 'text'
+
+# it seems necessary to trim 
+# {results:   
+# off the start before the first [ and after the final ] trim off
+# ,"requestParameters":{"maxResults":500,"fromDate":"201903290500","toDate":"201903292100"}}
+
+timeNtextDF = pd.read_json(twit29Tusk)
+#print(timeNtextDF)
+
+timeNtextDF.set_index('created_at')
+#timeNtextDF
+
+timeNtextDF.loc[:, ('created_at', 'lang', 'extended_tweet', 'text')]
+
+
+
+
+
+
+
+
+
