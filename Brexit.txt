@@ -1,0 +1,196 @@
+PROJECT
+    Inputs
+Sentiment, changing areas of concern, politicians' and commentators' rise and fall over time
+
+    Display
+Slider bar for date, arrow keys to progress, regress, play
+Option for suggested dates:  announcement, polling day, shooting of Jo Cox (?), first deadline
+Radio button - day,week,month, quarter aggregate 
+- tweets per capita for governing cities London, Cardiff, Edinburgh, Belfast
+- sentiment in governing cities
+- three Brexit-related tweets that day, include user picture and location in Great Britain
+
+Building blocks
+    Story
+Ted Heath to Theresa May, EEC, EU, Financial Crisis, Lehman Brothers, Northern Rock, Grexit, Euroskeptics, ERG, UKIP, Nigel Farage, David Cameron, Referendum, Remain & Leave campaigns, Jo Cox, Article 50, 29th March, Jeremy Corbyn, DUP, Scottish independence, Alec Salmond, Nicola Sturgeon, Good Friday Agreement, Stormont, Michael ..., Ian Paisley, Irish border.  Phases of moon, articles, death of Jo Cox.
+
+    Limits
+Timespan - from Good Friday agreement, UKIP, announcement of referendum to current tweets
+
+
+MARKSCHEME
+    • Analysis and Interpretation of data – 70%
+- Analysis context and aims (incl. reference to relevant literature and projects)
+- Data collection, handling, cleaning and management
+- Depth and scope of data analysis
+- Appropriateness of data visualisation
+- Interpretation and reporting of analysis and major findings
+- Clarity of presentation of results
+    • Demonstration of technical skills – 20%
+- Choice and rationale of data analysis methods used
+    • Creativity of analytical work – 10%
+
+
+Newsapi API key
+76db08c559e049b58842271bb5347329
+
+Introducing Python
+https://stackabuse.com/accessing-the-twitter-api-with-python/
+
+    TWITTER ANALYSIS BLOGS
+https://nbviewer.jupyter.org/github/hugadams/twitter_play/blob/master/tweepy_tutorial.ipynb?utm_content=14023248&utm_medium=social&utm_source=twitter
+https://nbviewer.jupyter.org/gist/fperez/5681541/TwitterGraphs.ipynb
+
+
+    twitter and twurl
+twurl authorize -u NarratorJay --consumer-key ootDTSnMP3CVgrJzwRHaYFu7R --consumer-secret SXvfCvyc7LxAx1z3JxZWDlEwhLa34V9GmMRktBQUyeNyKMAlu5
+
+
+Developer website is https://developer.twitter.com/
+Standard filtering is on webpage https://developer.twitter.com/en/docs/tweets/rules-and-filtering/overview/standard-operators
+Premium filtering $99 for one month of 100 searches is on webpage https://developer.twitter.com/en/docs/tweets/rules-and-filtering/overview/premium-operators
+* signed up for Premium sandbox with fifty free searches of full archive
+
+
+
+Search endpoint is https://api.twitter.com/1.1/tweets/search/fullarchive/BrexitMoon.json  hopefully not BrexitMoon-0 which is the dev accound
+
+Build a search by starting at twitter.com/search, enter #Haarde, get search expression https://twitter.com/search?q=%23Haarde&src=typd
+Replace   https://twitter.com/search   with   https://api.twitter.com/1.1/tweets/search/fullarchive/BrexitMoon.json   and build full search term 
+https://api.twitter.com/1.1/tweets/search/fullarchive/BrexitMoon.json?q=%23Haarde&src=typde
+
+What do newsAPI .json results give me to work with?
+"source" { "name": , 
+"title", "description", "publishedAt", "content"
+Can measure local date and time of tweet, title & description & content sentiment and word clouds
+And time of day, phase of moon, month of year.
+
+What do twitter .json results give me to work with?
+
+IMPORTING TWEETS
+'created_at' always appears in pairs, the date of the tweet (or the tweet that was retweeted) and the date the tweeter joined 
+'text' is always the text of the tweet or the retweet
+'text': 'In view of the rejection...'
+'hashtags': [{'text': 'Brexit'...
+'full_text'
+'lang': 'en'
+'truncated': False
+
+TRUNCATING TWEETS
+Get Python to truncate all 92 tweet downloads.  Fortunately the .json files always begin with   {"results":  before the first square bracket and after the final square bracket the files always end with information similar to   ,"requestParameters":{"maxResults":500,"fromDate":"201903290500","toDate":"201903292100"}}   so it is straighforward to remove the same number of characters from each beginning and end of every file.
+
+
+
+
+2008 ICELAND BANKING CRISIS
+Twitter was still young, having started in 2006 this and this could be the main reason that the hashtags chosen did not yield anything.  Nothing was returned for  #Haarde (outgoing premier), #Iceland (name of country and bank that crashed), #Sigurdardottir (minister who rose to power) and #krona (currency that slumped and recovered).  Only #Iceland appeared some months after the crisis but with tourism connotations.
+
+2009 EU ELECTIONS
+
+
+
+
+Bias is towards the end of the day, the search works backwards in time and my range is thus 2300 - 0500.
+
+Can measure local time of tweet, twitter age, tweet sentiment, tweet word cloud, description sentiment, text sentiment, followers, sometimes location.
+    'followers_count': 754,     * people who follow you, not the same as
+    'friends_count': 561,       * people you follow
+    'listed_count': 130,        * the number of lists the account is on, can be followed less visibly
+    'favourites_count': 352,    * number of likes on tweets
+    'statuses_count': 105234,   * tweets, retweets and replies
+And time of day, phase of moon, month of year.  Could do daylight hours and day/night time if latitude is known.
+Can compare with newsAPI sentiment during same week.
+
+Then smash together.
+
+SQL columns
+index, 
+twitter always "created_at", "text", "user": { "created_at", "user": { "description",
+
+always sentiment, always word cloud (not prepositions though), always time of day 
+twitter sometimes "derived": { "locations": [ { "country": "United States", "derived": { "locations": [ { "geo": { "coordinates": [ -84.38798, 33.749
+date always phase of moon, month of year, time since twitter began, twitter user age
+date sometimes daylight hours, tweeted in day or nighttime, sometimes distance from event
+
+
+
+"created_at": "Mon Jul 06 22:43:41 +0000 2009",
+      
+"user": {
+    "id": 17765055,
+    "id_str": "17765055",
+    "name": "Mira #9966",
+    "screen_name": "Mirelle_Mira",
+    "location": null,
+    "url": null,
+    "description": "I'm a professional meme sharing. Or something like that 🤷",
+    "translator_type": "none",
+    "protected": false,
+    "verified": false,
+    "followers_count": 754,
+    "friends_count": 561,
+    "listed_count": 130,
+    "favourites_count": 352,
+    "statuses_count": 105234,
+  * "created_at": "Sun Nov 30 22:58:41 +0000 2008",
+
+"text": ".@jeffemanuel I noticed #US #crime was below most of the #EU, & we report more crimes as \"violent\" than most of them!",
+"location": "Atlanta, GA",
+* if location is recognised then twitter provides co-ordinates
+    "derived": {
+          "locations": [
+            {
+              "country": "United States",
+              "country_code": "US",
+              "locality": "Atlanta",
+              "region": "Georgia",
+              "sub_region": "Fulton County",
+              "full_name": "Atlanta, Georgia, United States",
+              "geo": {
+                "coordinates": [
+                  -84.38798,
+                  33.749
+                ],
+                "type": "point"
+              }
+            }
+          ]
+        },
+"utc_offset": null,   * maybe this is a limitation of Premium account
+"time_zone": null,
+
+TWITTER SENTIMENT NOTES
+
+cleaning text with regex and classifying with TextBlob  https://www.geeksforgeeks.org/twitter-sentiment-analysis-using-python/
+
+    AYLIEN
+Classifying with Aylien API up to 1,000 tweets per day  http://blog.aylien.com/build-a-sentiment-analysis-tool-for-twitter-with-this-simple-python-script/
+    App name 	UCLnarratorjayApp
+    App ID 	2e3652f1
+    Key 	77e0e2e019d20ea8aba8ad12572507a7
+    Endpoint 	https://api.aylien.com/api/v1
+"Basic or free subscribers using the Aylien API and related Content or Data, shall agree to conspicuously display the Aylien API logo to indicate that Aylien technology is being used.  This graphic shall measure at least 200 by 100 pixels and be displayed on all web pages, documents or other renderings where Aylien API Content or API data is used."
+
+    AZURE
+Name   BrexitTweets
+KEY1   5882a23a5c034ea0ae77b65a70b28bab
+KEY2   9440a69d7b294593b127c155014b48b6
+endpoint https://uksouth.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment   
+example of use https://westus.dev.cognitive.microsoft.com/docs/services/TextAnalytics.V2.0/operations/56f30ceeeda5650db055a3c7 
+
+
+
+    ONE HOT ENCODING
+Look up 8_AnalysisProcess_2019.pdf to get sentiment results in a table of booleans.
+
+WORD CLOUD
+
+RitaJS Compatible with Processing   https://rednoise.org/rita/   
+RitaJS demo                 https://creative-coding.decontextualize.com/intro-to-ritajs/  
+Wordcram also uses Processing looks easier to use   http://wordcram.org/
+
+what was the idea for the wordcloud?  something to do with Farage?   
+
+
+
+
